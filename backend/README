@@ -1,1 +1,49 @@
-// Lanch the server with the backend => nodemon server
+//! Lanch the server with the backend => nodemon server //
+
+/// Authentification ///
+
+// Username : Johnathan08
+// Password : 43aL5qRSN3nbyRHk
+
+// Définition :
+
+// CORS signifie « Cross Origin Resource Sharing ».
+
+// SQL : base de données relationnelle qui emploie le langage Structured Query Language pour gérer les données qu'elle contient, organise ses données dans des tableaux 
+
+// NoSQL : Les données sont stockées comme des collections de documents individuels décrits en JSON (moin strict que SQL)
+
+
+
+//! Repaire
+// Thing = Book
+// thingSchema = bookSchema
+// createThing = createBook
+
+/// Folder
+// routes/stuff => routes/router
+
+
+//! Code pour modifier
+// router.post('/', (req, res, next) => {
+//   const thing = new Thing({
+//     title: req.body.title,
+//     description: req.body.description,
+//     imageUrl: req.body.imageUrl,
+//     price: req.body.price,
+//     userId: req.body.userId
+//   });
+//   thing.save().then(
+//     () => {
+//       res.status(201).json({
+//         message: 'Post saved successfully!'
+//       });
+//     }
+//   ).catch(
+//     (error) => {
+//       res.status(400).json({
+//         error: error
+//       });
+//     }
+//   );
+// });
