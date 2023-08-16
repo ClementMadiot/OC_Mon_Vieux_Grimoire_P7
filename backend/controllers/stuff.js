@@ -5,12 +5,12 @@ const fs = require('fs')
 exports.createBook = (req, res, next) => {
   console.log(req.body);
   const bookObject = JSON.parse(req.body.book);
+  console.log(bookObject);
   delete bookObject._id;
   delete bookObject._userId;
-  console.log(bookObject);
   const book = new Book({
     ...bookObject,
-    _userId: req.auth._userId,
+    // _userId: req.auth._userId,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     
   });
