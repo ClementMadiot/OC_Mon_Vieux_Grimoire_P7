@@ -3,14 +3,13 @@ const fs = require('fs')
 
 // Créer //
 exports.createBook = (req, res, next) => {
-  console.log(req.body);
   const bookObject = JSON.parse(req.body.book);
   console.log(bookObject);
   delete bookObject._id;
   delete bookObject._userId;
   const book = new Book({
     ...bookObject,
-    // _userId: req.auth._userId,
+    _userId: req.auth._userId,
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     
   });
@@ -41,7 +40,7 @@ exports.modifyBook = (req, res, next) => {
 }
 // Cibler le livre //
 exports.getOneBook = (req, res, next) => {
-  // console.log(Book.findOne(_id));
+  // console.log(Book.findOne({ _id: req.params.id }));
   Book.findOne({ _id: req.params.id })
   .then(book => res.status(200).json(book))
   .catch(error => res.status(404).json({ error }))
@@ -57,8 +56,10 @@ exports.getAllBook = (req, res) => {
 // Supprimer //
 exports.deleteBook = (req, res, next) => {
   Book.findOne({_id: req.params.id})
-  .then(book => {
-    if(book.userId != req.auth.userId) {
+  .then((book) => {
+    if(book._userId != req.auth.userId) {
+      console.log(book.userId);
+      console.log(req.auth.userId);
       res.status(401).json({ message: 'Non-autorisé' });
     } else {
       const filename = book.imageUrl.split('/images/')[1];
