@@ -1,8 +1,8 @@
 const express = require('express')
-const bodyParser = require('body-parser')
 const mongoose = require('mongoose');
 
 const stuffRoutes = require('./routes/router')
+const userRoutes = require('./routes/user')
 
 //Connexion à MongoDB //
 mongoose.connect('mongodb+srv://Johnathan08:43aL5qRSN3nbyRHk@cluster0.4nrbmuq.mongodb.net/?retryWrites=true&w=majority',
@@ -12,6 +12,7 @@ mongoose.connect('mongodb+srv://Johnathan08:43aL5qRSN3nbyRHk@cluster0.4nrbmuq.mo
   .catch(() => console.log('Connexion à MongoDB échouée !'));
   
 const app = express();
+app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 // CORS //
@@ -22,7 +23,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
+// Racine router //
+app.use('/images', express.static('images'));
+app.use('/api/books', stuffRoutes);
+app.use('/api/auth', userRoutes);
 
-app.use('/api/books', stuffRoutes)
+
 module.exports = app;

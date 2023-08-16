@@ -7,15 +7,11 @@ const bookSchema = mongoose.Schema({
   userId: { type: String, require: true },
   year: { type: Number, require: true },
   genre: { type: String, require: true },
+  rating: [{
+    userId: { type: String, require: true },
+    grade: { type: Number, require: true },
+  }],
+  averageRating: { type: Number, require: true },
 });
 
 module.exports = mongoose.model('Book', bookSchema)
-
-// ratings : [ 
-//   { 
-//     userId : String     - identifiant MongoDB unique de l'utilisateur qui a noté le livre 
-//     grade : Number     - note donnée à un livre 
-//   } 
-// ]
-// - notes données à un livre averageRating : Number     - note moyenne du livre 
-// }
