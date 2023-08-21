@@ -4,7 +4,6 @@ const fs = require('fs')
 // Créer //
 exports.createBook = (req, res, next) => {
   const bookObject = JSON.parse(req.body.book);
-  console.log(bookObject);
   delete bookObject._id;
   delete bookObject._userId;
   const book = new Book({
@@ -13,10 +12,14 @@ exports.createBook = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     
   });
-  console.log(book);
+  console.log(bookObject);
+  // console.log(book);
   book.save()
   .then(() => { res.status(201).json({ message: 'Objet enrengistré !' }) })
-  .catch(error => { res.status(400).json({ error })})
+  .catch(error => { 
+    console.log(error);
+   return res.status(400).json({ error })
+  })
 }
 
 // Modifier //
@@ -32,6 +35,7 @@ exports.modifyBook = (req, res, next) => {
       if(book._userId != req.auth.userId) {
         res.status(401).json({ message: 'Non-autorisé' })
       } else {
+        console.log({  ...bookObject.ratings }); 
         Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
         .then(() => res.status(200).json({ message: 'Objet modifié' }))
         .catch(error => res.status(400).json({ error }));
@@ -50,16 +54,16 @@ exports.getOneBook = (req, res, next) => {
 exports.getAllBook = (req, res) => {
   Book.find()
   .then(books => res.status(200).json(books))
-  .catch(error => res.status(400).json({ erreur }))
+  .catch(error => res.status(400).json({ error }))
 }
 
 // Supprimer //
 exports.deleteBook = (req, res, next) => {
   Book.findOne({_id: req.params.id})
-  .then((book) => {
+  .then(book => {
     if(book._userId != req.auth.userId) {
-      console.log(book.userId);
-      console.log(req.auth.userId);
+      // console.log(book.userId);
+      // console.log(req.auth.userId);
       res.status(401).json({ message: 'Non-autorisé' });
     } else {
       const filename = book.imageUrl.split('/images/')[1];
@@ -71,4 +75,26 @@ exports.deleteBook = (req, res, next) => {
     }
   })
   .catch(error => res.status(500).json({ error }))
+}
+
+// Meilleur livres //
+exports.bestRatingBook = (req, res, next) => {
+  console.log({b});
+  Book.find()
+  .sort({ averageRating: -1 })
+  .limit(3)
+  .then(books => res.status(200).json(books))
+  .catch(error => res.status(400).json({ error }))
+}
+
+exports.ratingBook = (res, req, next) => {
+  console.log(req.body);
+  Book.updateOne(
+    { _id: req.params.id}, 
+    { $push:{ratings:{userId:'', grade:2}}}
+  )
+  .catch(error => { 
+    console.log(error);
+  return res.status(400).json({ error })
+  })
 }
