@@ -79,7 +79,6 @@ exports.deleteBook = (req, res, next) => {
 
 // Meilleur livres //
 exports.bestRatingBook = (req, res, next) => {
-  console.log({b});
   Book.find()
   .sort({ averageRating: -1 })
   .limit(3)
@@ -87,7 +86,7 @@ exports.bestRatingBook = (req, res, next) => {
   .catch(error => res.status(400).json({ error }))
 }
 
-exports.ratingBook = (res, req, next) => {
+exports.ratingBook = (req, res, next) => {
   console.log(req.body);
   Book.updateOne(
     { _id: req.params.id}, 

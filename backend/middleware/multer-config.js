@@ -1,4 +1,5 @@
 const multer = require('multer');
+const sharp = require('sharp');
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
@@ -8,6 +9,12 @@ const MIME_TYPES = {
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
+    // sharp('images')
+    // .resize(420)
+    // .on('info', function(info) {
+    //   console.log("Image height is" + info.height);
+    // })
+    // MIME_TYPES.pipe(transformer).pipe(writableStream);
     callback(null, 'images')
   },
   filename: (req, file, callback) => {
