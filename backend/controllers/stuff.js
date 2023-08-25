@@ -12,8 +12,8 @@ exports.createBook = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     
   });
-  console.log(bookObject);
-  // console.log(book);
+  console.log(`${req.file.filename}`);
+  // console.log(bookObject);
   book.save()
   .then(() => { res.status(201).json({ message: 'Objet enrengistré !' }) })
   .catch(error => { 

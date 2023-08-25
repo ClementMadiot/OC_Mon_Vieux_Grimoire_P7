@@ -1,27 +1,33 @@
 const multer = require('multer');
-const sharp = require('sharp');
+const SharpMulter  =  require("sharp-multer");
 
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
-  'image/png': 'png'
+  'image/png': 'png',
+  'image/webp': 'webp'
 };
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    // sharp('images')
-    // .resize(420)
-    // .on('info', function(info) {
-    //   console.log("Image height is" + info.height);
-    // })
-    // MIME_TYPES.pipe(transformer).pipe(writableStream);
-    callback(null, 'images')
-  },
-  filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    callback(null, name + Date.now() + '.' + extension);
-  }
-});
+const newFileName = (filename, options) => {
+
+  // console.log(options.fileFormat.MIME_TYPES.useTimestamp);
+  const extension = options.fileFormat.MIME_TYPES;
+  const newName = filename.split(".").slice(0, -1).join(".") +
+    `${options.fileFormat.MIME_TYPES.useTimestamp ? "-" + Date.now() : ""}` +
+    "." + extension;
+  return newName;
+};
+
+const storage = 
+  SharpMulter ({
+    destination:(req, file, callback) => callback(null, "images"),
+    imageOptions:{
+      fileFormat: { MIME_TYPES },
+      quality: 80,
+      resize: { width: 500, height: 500 },
+    },
+    filename:newFileName,
+  });
+
 
 module.exports = multer({ storage }).single('image');
