@@ -10,8 +10,8 @@ const MIME_TYPES = {
 
 const newFileName = (filename, options) => {
 
-  // console.log(options.fileFormat.MIME_TYPES.useTimestamp);
-  const extension = options.fileFormat.MIME_TYPES;
+  let list_MIME_TYPE = filename.split(".");
+  const extension = list_MIME_TYPE[list_MIME_TYPE.length-1];
   const newName = filename.split(".").slice(0, -1).join(".") +
     `${options.fileFormat.MIME_TYPES.useTimestamp ? "-" + Date.now() : ""}` +
     "." + extension;

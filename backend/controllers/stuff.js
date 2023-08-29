@@ -12,13 +12,12 @@ exports.createBook = (req, res, next) => {
     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     
   });
-  console.log(`${req.file.filename}`);
-  // console.log(bookObject);
+  console.log(bookObject);
   book.save()
   .then(() => { res.status(201).json({ message: 'Objet enrengistré !' }) })
   .catch(error => { 
     console.log(error);
-   return res.status(400).json({ error })
+  return res.status(400).json({ error })
   })
 }
 
@@ -35,7 +34,7 @@ exports.modifyBook = (req, res, next) => {
       if(book._userId != req.auth.userId) {
         res.status(401).json({ message: 'Non-autorisé' })
       } else {
-        console.log({  ...bookObject.ratings }); 
+        console.log({  ...bookObject }); 
         Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
         .then(() => res.status(200).json({ message: 'Objet modifié' }))
         .catch(error => res.status(400).json({ error }));
@@ -86,14 +85,53 @@ exports.bestRatingBook = (req, res, next) => {
   .catch(error => res.status(400).json({ error }))
 }
 
+// Méthode pour calculer la note moyenne
+function calculateAverageRating(ratings) {
+  console.log(ratings);
+  if(ratings.length === 0) {
+    return 0;
+  }
+  const totalRatings = ratings.length;
+  const sumOfRatings = ratings.reduce((sum, ratings) => sum + ratings.grade, 0);
+  const averageRating = sumOfRatings / totalRatings;
+
+  return averageRating;
+}
+
+
 exports.ratingBook = (req, res, next) => {
   console.log(req.body);
-  Book.updateOne(
-    { _id: req.params.id}, 
-    { $push:{ratings:{userId:'', grade:2}}}
+
+  Book.findOne(
+    { _id: req.params.id}
   )
-  .catch(error => { 
-    console.log(error);
-  return res.status(400).json({ error })
+  .then(book => {
+    let userFind = book.ratings.find(elem => 
+      elem.userId == req.body.userId
+      )
+      if(userFind) {
+        return res.status(403).json({ "message": 'Livre déjà noté' })
+      }
+    let total = [{userId:req.body.userId, grade:req.body.rating}];
+    let total2 = total.concat(book.ratings);
+    let globalNote = calculateAverageRating(total2)
+    console.log(globalNote);
+    Book.updateOne(
+      { _id: req.params.id}, 
+      { averageRating:globalNote }
+    )
+    .then(res => {
+      console.log(res);
+    })
+
+    Book.updateOne(
+      { _id: req.params.id}, 
+      { $push:{ratings:{userId:req.body.userId, grade:req.body.rating}}}
+    )
+    .catch(error => { 
+      console.log(error);
+    return res.status(400).json({ error })
+    })
+    return res.status(200).json( book )
   })
 }
