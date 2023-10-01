@@ -32,8 +32,8 @@ exports.modifyBook = (req, res, next) => {
   Book.findOne({_id: req.params.id})
   .then((book) => {
     // console.log(req.params.id);
-    console.log(book.id);
-      if(book._userId != req.auth.userId) {
+    console.log(book.userId);
+      if(book.userId != req.auth.userId) {
         res.status(401).json({ message: 'Non-autorisé' })
       } else {
         console.log({  ...bookObject }); 
@@ -62,7 +62,7 @@ exports.getAllBook = (req, res) => {
 exports.deleteBook = (req, res, next) => {
   Book.findOne({_id: req.params.id})
   .then(book => {
-    if(book._userId != req.auth.userId) {
+    if(book.userId != req.auth.userId) {
       // console.log(book.userId);
       // console.log(req.auth.userId);
       res.status(401).json({ message: 'Non-autorisé' });
