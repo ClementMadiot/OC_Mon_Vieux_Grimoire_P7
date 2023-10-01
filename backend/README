@@ -1,7 +1,10 @@
-//! Lanch the server with the backend => nodemon server //
+//! Lanch the server (MongoDB) with the backend => nodemon server //
+
+//! Lanch the frontend with npm //
+
+
 
 /// Authentification ///
-
 
 // email : Johnathan08@test.com
 // Password : 43aL5qRSN3nbyRHk
@@ -9,29 +12,3 @@
 // user 2 : 
 // jeanCastel@test.com
 // 43aL5qRSN3nbyRHk
-
-// Définition :
-
-// CORS signifie « Cross Origin Resource Sharing ».
-
-// SQL : base de données relationnelle qui emploie le langage Structured Query Language pour gérer les données qu'elle contient, organise ses données dans des tableaux 
-
-// NoSQL : Les données sont stockées comme des collections de documents individuels décrits en JSON (moin strict que SQL)
-
-
-
-//! Repaire
-// Thing = Book
-// thingSchema = bookSchema
-// createThing = createBook
-
-/// Folder
-// routes/stuff => routes/router
-
-// exports.getOneBook = (req, res, next) => {
-//   // console.log(Book.findOne({ _id: req.params.id }));
-//   Book.findOne({ _id: req.params.id })
-//   .then(book => res.status(200).json(book))
-//   .catch(error => res.status(404).json({ error }))
-// }
-

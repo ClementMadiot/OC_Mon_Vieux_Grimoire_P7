@@ -9,7 +9,6 @@ const MIME_TYPES = {
 };
 
 const newFileName = (filename, options) => {
-
   let list_MIME_TYPE = filename.split(".");
   const extension = list_MIME_TYPE[list_MIME_TYPE.length-1];
   const newName = filename.split(".").slice(0, -1).join(".") +
@@ -17,7 +16,6 @@ const newFileName = (filename, options) => {
     "." + extension;
   return newName;
 };
-
 const storage = 
   SharpMulter ({
     destination:(req, file, callback) => callback(null, "images"),
@@ -28,6 +26,5 @@ const storage =
     },
     filename:newFileName,
   });
-
 
 module.exports = multer({ storage }).single('image');
