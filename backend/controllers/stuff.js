@@ -30,7 +30,9 @@ exports.modifyBook = (req, res, next) => {
 
   delete bookObject._userId;
   Book.findOne({_id: req.params.id})
-    .then((book) => {
+  .then((book) => {
+    // console.log(req.params.id);
+    console.log(book.id);
       if(book._userId != req.auth.userId) {
         res.status(401).json({ message: 'Non-autorisé' })
       } else {
