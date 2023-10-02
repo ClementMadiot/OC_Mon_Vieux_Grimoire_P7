@@ -11,9 +11,9 @@ const MIME_TYPES = {
 const newFileName = (filename, options) => {
   let list_MIME_TYPE = filename.split(".");
   const extension = list_MIME_TYPE[list_MIME_TYPE.length-1];
-  const newName = filename.split(".").slice(0, -1).join(".") +
-    `${options.fileFormat.MIME_TYPES.useTimestamp ? "-" + Date.now() : ""}` +
-    "." + extension;
+  const newName = filename.split(".").slice(0, -1).join(".") + Date.now() +
+  "." + extension;
+  console.log(newName);
   return newName;
 };
 const storage = 

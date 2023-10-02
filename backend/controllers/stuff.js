@@ -32,11 +32,11 @@ exports.modifyBook = (req, res, next) => {
   Book.findOne({_id: req.params.id})
   .then((book) => {
     // console.log(req.params.id);
-    console.log(book.userId);
+    // console.log(book.userId);
       if(book.userId != req.auth.userId) {
         res.status(401).json({ message: 'Non-autorisé' })
       } else {
-        console.log({  ...bookObject }); 
+        // console.log({  ...bookObject }); 
         Book.updateOne({ _id: req.params.id}, { ...bookObject, _id: req.params.id})
         .then(() => res.status(200).json({ message: 'Objet modifié' }))
         .catch(error => res.status(400).json({ error }));
@@ -117,7 +117,8 @@ exports.ratingBook = (req, res, next) => {
     let total = [{userId:req.body.userId, grade:req.body.rating}];
     let total2 = total.concat(book.ratings);
     let globalNote = calculateAverageRating(total2)
-    console.log(globalNote);
+    // console.log(globalNote);
+    
     Book.updateOne(
       { _id: req.params.id}, 
       { averageRating:globalNote }
